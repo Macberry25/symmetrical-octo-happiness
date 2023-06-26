@@ -1,0 +1,23 @@
+from flask import Flask, render_template, request, redirect
+
+app = Flask(__name__)
+
+# Temporary data store for job postings
+jobs = []
+
+@app.route('/')
+def home():
+    return render_template('index.html', jobs=jobs)
+
+@app.route('/post_job', methods=['GET', 'POST'])
+def post_job():
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        # Save the job posting to the temporary data store
+        jobs.append({'title': title, 'description': description})
+        return redirect('/')
+    return render_template('post_job.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
